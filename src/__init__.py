@@ -1,0 +1,1 @@
+from mailConfig import *

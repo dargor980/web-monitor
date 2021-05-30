@@ -1,34 +1,10 @@
 import requests
-import smtplib
 import time
 import json
 import os
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import mailConfig
 
-msg = MIMEMultipart()
 
-message = """Se ha dectado una caída en el/los sitio(s) 
-https://prismasoftware.cl . Hora de la incidencia: """ + time.strftime("%I:%M:%S")
-
-password = "vllbckfxutrtnbba"
-msg['From'] = "german.contrerasa@utem.cl"
-msg['To'] = "cafesitomygod@gmail.com"
-msg['Subject'] = "Sitio(s) Caido(s)"
-
-msg.attach(MIMEText(message,'plain'))
-
-server = smtplib.SMTP('smtp.gmail.com: 587')
-
-server.starttls()
-
-server.login(msg['From'], password)
-
-server.sendmail(msg['From'], msg['To'], msg.as_string())
-
-server.quit()
-
-print("Mensaje Enviado")
 webAdresses = []
 with open('src/sites.json') as file:
     sites = json.load(file)
@@ -38,6 +14,7 @@ with open('src/sites.json') as file:
 
 downWebSites = []
 
+mailConfig.sendEmail(downWebSites)
 while True:
 
     for req in webAdresses:
