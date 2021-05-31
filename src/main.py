@@ -3,6 +3,7 @@ import time
 import json
 import os
 import mailConfig
+import http_Errors
 
 
 webAdresses = []
@@ -20,7 +21,8 @@ while True:
             if r.status_code == requests.codes.ok:
                 print("OK")
             else:
-                downWebSites.append([req," - Error: " + str(r.status_code) + "\n"])
+                description = http_Errors.getCodeErrorDescription(r.status_code)
+                downWebSites.append([req," - Error: " + str(r.status_code) + ": " + description + "\n"])
         except requests.exceptions.RequestException:
             print("URL NO EXISTENTE")
             downWebSites.append([req, " - Error: DNS_PROBE_FINISHED_NXDOMAIN\n"])
@@ -29,6 +31,6 @@ while True:
         mailConfig.sendEmail(downWebSites)
         downWebSites = []
     else:
-        print("NO SE CAYERON SITIOS EN ESTA ITERACION")
+        print("NO SE ENCONTRARON INCIDENCIAS EN ESTA ITERACION")
     time.sleep(300)
 
